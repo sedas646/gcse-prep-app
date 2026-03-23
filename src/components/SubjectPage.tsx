@@ -30,12 +30,12 @@ export default function SubjectPage() {
   const checkpointsForSubject = state.checkpointResults.filter(c => c.subjectId === subject.id);
 
   return (
-    <div className="p-8 max-w-5xl mx-auto">
+    <div className="p-4 md:p-8 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
-        <span className="text-5xl">{subject.icon}</span>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold text-slate-800">{subject.name}</h1>
+      <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+        <span className="text-3xl md:text-5xl">{subject.icon}</span>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl md:text-3xl font-bold text-slate-800">{subject.name}</h1>
           <p className="text-sm text-slate-500">{subject.examBoard} • {subject.specification}</p>
         </div>
         <div className="text-right">
@@ -53,7 +53,7 @@ export default function SubjectPage() {
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-3 mb-8">
+      <div className="flex flex-wrap gap-2 md:gap-3 mb-6 md:mb-8">
         <button
           onClick={() => navigate(`/subject/${subject.id}/diagnostic`)}
           className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 transition-colors"

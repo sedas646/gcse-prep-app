@@ -74,7 +74,7 @@ export default function PracticeQuestions({ questions, topicId, subjectColor }: 
         <p className="text-slate-500 mb-1">{totalCorrect} out of {questions.length} correct</p>
         <p className="text-sm text-emerald-600 mb-6">+{XP_REWARDS.PRACTICE_COMPLETE} XP earned</p>
 
-        <div className="flex gap-2 justify-center mb-6">
+        <div className="flex flex-wrap gap-2 justify-center mb-6">
           {questions.map((_, i) => (
             <div
               key={i}

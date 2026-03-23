@@ -99,7 +99,7 @@ export default function Checkpoint() {
 
   if (!started) {
     return (
-      <div className="p-8 max-w-2xl mx-auto">
+      <div className="p-4 md:p-8 max-w-2xl mx-auto">
         <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
           <span className="text-5xl mb-4 block">📋</span>
           <h1 className="text-2xl font-bold text-slate-800 mb-2">{subject.name} GCSE Checkpoint</h1>
@@ -129,7 +129,7 @@ export default function Checkpoint() {
   if (result) {
     const allTopics = subject.units.flatMap(u => u.topics);
     return (
-      <div className="p-8 max-w-3xl mx-auto">
+      <div className="p-4 md:p-8 max-w-3xl mx-auto">
         <div className="bg-white rounded-xl border border-slate-200 p-8">
           <div className="text-center mb-8">
             <div className="text-5xl mb-3">
@@ -179,7 +179,7 @@ export default function Checkpoint() {
 
   const question = questions[currentIndex];
   return (
-    <div className="p-8 max-w-2xl mx-auto">
+    <div className="p-4 md:p-8 max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold text-slate-800">{subject.icon} Checkpoint</h2>
         <div className="flex items-center gap-4">

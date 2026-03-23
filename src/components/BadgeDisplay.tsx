@@ -6,14 +6,14 @@ export default function BadgeDisplay() {
   const locked = state.badges.filter(b => !b.earned);
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-slate-800 mb-2">Badges & Achievements</h1>
+    <div className="p-4 md:p-8 max-w-4xl mx-auto">
+      <h1 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">Badges & Achievements</h1>
       <p className="text-slate-500 mb-8">
         {earned.length} of {state.badges.length} badges earned. Keep going!
       </p>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
         <div className="bg-white rounded-xl p-4 border border-slate-200 text-center">
           <p className="text-3xl font-bold text-indigo-600">{state.level}</p>
           <p className="text-xs text-slate-400">Level</p>
@@ -36,7 +36,7 @@ export default function BadgeDisplay() {
       {earned.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-bold text-slate-800 mb-4">🏆 Earned ({earned.length})</h2>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
             {earned.map(badge => (
               <div
                 key={badge.id}
@@ -61,7 +61,7 @@ export default function BadgeDisplay() {
       {/* Locked Badges */}
       <div>
         <h2 className="text-xl font-bold text-slate-800 mb-4">🔒 Locked ({locked.length})</h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           {locked.map(badge => (
             <div
               key={badge.id}

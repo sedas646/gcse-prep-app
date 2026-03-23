@@ -38,7 +38,7 @@ export default function TopicPage() {
   ];
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
+    <div className="p-4 md:p-8 max-w-4xl mx-auto">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-slate-400 mb-4">
         <Link to={`/subject/${subject.id}`} className="hover:text-indigo-600 no-underline text-slate-400">
@@ -84,7 +84,7 @@ export default function TopicPage() {
               setActiveTab(tab.key);
               if (tab.key === 'learn') handleExplanationRead();
             }}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-md text-sm font-medium transition-all ${
+            className={`flex-1 flex items-center justify-center gap-1 md:gap-2 py-2 md:py-2.5 px-2 md:px-4 rounded-md text-xs md:text-sm font-medium transition-all ${
               activeTab === tab.key
                 ? 'bg-white text-indigo-700 shadow-sm'
                 : 'text-slate-500 hover:text-slate-700'

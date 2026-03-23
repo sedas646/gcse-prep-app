@@ -120,7 +120,7 @@ export default function MockTest() {
   // Start screen
   if (!started) {
     return (
-      <div className="p-8 max-w-2xl mx-auto">
+      <div className="p-4 md:p-8 max-w-2xl mx-auto">
         <div className="bg-white rounded-xl border-2 border-slate-300 overflow-hidden">
           {/* AQA-style header */}
           <div className="bg-gradient-to-r from-slate-800 to-slate-700 p-6 text-white">
@@ -185,7 +185,7 @@ export default function MockTest() {
     const { grade, color } = getGrade(result.percentage);
 
     return (
-      <div className="p-8 max-w-3xl mx-auto">
+      <div className="p-4 md:p-8 max-w-3xl mx-auto">
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-slate-800 to-slate-700 p-6 text-white text-center">
@@ -207,7 +207,7 @@ export default function MockTest() {
 
           <div className="p-6">
             {/* Stats row */}
-            <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6">
               <div className="bg-slate-50 rounded-lg p-3 text-center">
                 <p className="text-xs text-slate-400">Time Taken</p>
                 <p className="text-lg font-bold text-slate-700">{formatTime(Math.floor(result.timeTaken / 1000))}</p>
@@ -303,7 +303,7 @@ export default function MockTest() {
   ).length;
 
   return (
-    <div className="p-8 max-w-2xl mx-auto">
+    <div className="p-4 md:p-8 max-w-2xl mx-auto">
       {/* Top bar */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">

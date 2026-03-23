@@ -60,7 +60,7 @@ export default function DiagnosticTest() {
   if (!started) {
     const existingDiagnostic = state.diagnosticResults.find(d => d.subjectId === subject.id);
     return (
-      <div className="p-8 max-w-2xl mx-auto">
+      <div className="p-4 md:p-8 max-w-2xl mx-auto">
         <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
           <span className="text-5xl mb-4 block">{subject.icon}</span>
           <h1 className="text-2xl font-bold text-slate-800 mb-2">{subject.name} Diagnostic Test</h1>
@@ -99,7 +99,7 @@ export default function DiagnosticTest() {
     const strongTopics = identifyStrongTopics(result.topicBreakdown);
 
     return (
-      <div className="p-8 max-w-3xl mx-auto">
+      <div className="p-4 md:p-8 max-w-3xl mx-auto">
         <div className="bg-white rounded-xl border border-slate-200 p-8">
           <div className="text-center mb-8">
             <div className="text-5xl mb-3">
@@ -200,7 +200,7 @@ export default function DiagnosticTest() {
   // Active quiz
   const question = questions[currentIndex];
   return (
-    <div className="p-8 max-w-2xl mx-auto">
+    <div className="p-4 md:p-8 max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold text-slate-800">{subject.icon} {subject.name} Diagnostic</h2>
         <span className="text-sm text-slate-500">

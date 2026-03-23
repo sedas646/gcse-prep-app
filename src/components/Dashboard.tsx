@@ -38,15 +38,15 @@ export default function Dashboard() {
   const diagnosticsDone = state.diagnosticResults.length;
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-800">Welcome Back! 👋</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Welcome Back! 👋</h1>
         <p className="text-slate-500 mt-1">Keep pushing for those top grades. Every question counts.</p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
         <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
           <p className="text-sm text-slate-500">Current Streak</p>
           <p className="text-3xl font-bold text-orange-500">🔥 {state.currentStreak}</p>
@@ -73,9 +73,9 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
         {/* Daily Challenge */}
-        <div className="col-span-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+        <div className="lg:col-span-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-4 md:p-6 text-white shadow-lg">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-2xl">🎯</span>
             <h2 className="text-xl font-bold">Daily Challenge</h2>
@@ -152,7 +152,7 @@ export default function Dashboard() {
 
       {/* Subject Cards */}
       <h2 className="text-xl font-bold text-slate-800 mb-4">Your Subjects</h2>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {subjects.map(subject => {
           const progress = getSubjectProgress(subject.id);
           const diagnostic = state.diagnosticResults.find(d => d.subjectId === subject.id);
