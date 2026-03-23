@@ -66,6 +66,12 @@ export default function SubjectPage() {
         >
           📋 GCSE Checkpoint
         </button>
+        <button
+          onClick={() => navigate(`/subject/${subject.id}/mock-test`)}
+          className="px-5 py-2.5 bg-slate-800 text-white rounded-lg text-sm font-semibold hover:bg-slate-900 transition-colors"
+        >
+          📝 AQA Mock Exam
+        </button>
         {diagnostic && (
           <div className="ml-auto bg-white rounded-lg border border-slate-200 px-4 py-2">
             <p className="text-xs text-slate-400">Last diagnostic</p>
