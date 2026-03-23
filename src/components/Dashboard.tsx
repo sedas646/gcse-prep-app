@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getDailyChallenge } from '../data/dailyChallenges';
+import { getDailyOlympiad } from '../data/olympiadPuzzles';
+import type { OlympiadPuzzle } from '../data/olympiadPuzzles';
 import { getAllSubjects } from '../data/index';
 
 export default function Dashboard() {
@@ -12,6 +14,28 @@ export default function Dashboard() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(todayChallenge?.answered || false);
   const subjects = getAllSubjects();
+
+  // Olympiad puzzles
+  const olympiad = getDailyOlympiad(today);
+  const mathsOlympiadKey = `olympiad-maths-${today}`;
+  const physicsOlympiadKey = `olympiad-physics-${today}`;
+  const mathsOlympiadDone = state.dailyChallenges[mathsOlympiadKey];
+  const physicsOlympiadDone = state.dailyChallenges[physicsOlympiadKey];
+  const [olympiadAnswers, setOlympiadAnswers] = useState<Record<string, number | null>>({});
+  const [olympiadResults, setOlympiadResults] = useState<Record<string, boolean>>({
+    [mathsOlympiadKey]: mathsOlympiadDone?.answered || false,
+    [physicsOlympiadKey]: physicsOlympiadDone?.answered || false,
+  });
+  const [showHint, setShowHint] = useState<Record<string, boolean>>({});
+
+  const handleOlympiadAnswer = (puzzle: OlympiadPuzzle, key: string, answerIndex: number) => {
+    if (olympiadResults[key]) return;
+    setOlympiadAnswers(prev => ({ ...prev, [key]: answerIndex }));
+    const correct = answerIndex === puzzle.correctAnswer;
+    setOlympiadResults(prev => ({ ...prev, [key]: true }));
+    dispatch({ type: 'ANSWER_DAILY_CHALLENGE', date: key, correct, questionId: puzzle.id });
+    dispatch({ type: 'ANSWER_QUESTION', correct });
+  };
 
   const handleChallengeAnswer = (answerIndex: number) => {
     if (showResult) return;
@@ -147,6 +171,96 @@ export default function Dashboard() {
             <h3 className="font-semibold text-slate-700">🏆 View All Badges</h3>
             <p className="text-xs text-slate-400 mt-1">Track your achievements</p>
           </Link>
+        </div>
+      </div>
+
+      {/* Olympiad Puzzles */}
+      <div className="mb-6 md:mb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-xl">🧩</span>
+          <h2 className="text-xl font-bold text-slate-800">Daily Olympiad Puzzles</h2>
+          <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">Brain Teasers</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            { puzzle: olympiad.maths, key: mathsOlympiadKey, icon: '📐', label: 'Maths', gradient: 'from-violet-500 to-indigo-600' },
+            { puzzle: olympiad.physics, key: physicsOlympiadKey, icon: '⚡', label: 'Physics', gradient: 'from-cyan-500 to-blue-600' },
+          ].map(({ puzzle, key, icon, label, gradient }) => {
+            const done = olympiadResults[key];
+            const answer = olympiadAnswers[key] ?? null;
+            const prevAnswer = state.dailyChallenges[key];
+            const wasCorrect = prevAnswer?.correct || answer === puzzle.correctAnswer;
+
+            return (
+              <div key={key} className={`bg-gradient-to-br ${gradient} rounded-xl p-4 md:p-5 text-white shadow-lg`}>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-lg">{icon}</span>
+                  <span className="font-bold text-sm">{label} Olympiad</span>
+                  <span className={`ml-auto text-xs px-2 py-0.5 rounded-full ${
+                    puzzle.difficulty === 'gold' ? 'bg-yellow-400/30' :
+                    puzzle.difficulty === 'silver' ? 'bg-slate-300/30' : 'bg-orange-400/30'
+                  }`}>
+                    {puzzle.difficulty === 'gold' ? '🥇' : puzzle.difficulty === 'silver' ? '🥈' : '🥉'} {puzzle.difficulty}
+                  </span>
+                </div>
+                <h3 className="font-bold text-base mb-2">{puzzle.title}</h3>
+                <p className="text-sm mb-3 text-white/90">{puzzle.puzzle}</p>
+
+                {!done && !showHint[key] && (
+                  <button
+                    onClick={() => setShowHint(prev => ({ ...prev, [key]: true }))}
+                    className="text-xs text-white/60 hover:text-white/90 mb-3 underline"
+                  >
+                    Show hint
+                  </button>
+                )}
+                {showHint[key] && !done && (
+                  <p className="text-xs text-white/70 bg-white/10 rounded-lg p-2 mb-3">
+                    💡 {puzzle.hint}
+                  </p>
+                )}
+
+                <div className="grid grid-cols-2 gap-2">
+                  {puzzle.options.map((opt, i) => {
+                    let cls = 'p-2.5 rounded-lg text-xs font-medium text-left transition-all ';
+                    if (done) {
+                      if (i === puzzle.correctAnswer) {
+                        cls += 'bg-emerald-400/30 border-2 border-emerald-300';
+                      } else if (i === answer && i !== puzzle.correctAnswer) {
+                        cls += 'bg-red-400/30 border-2 border-red-300';
+                      } else {
+                        cls += 'bg-white/10 border border-white/20 opacity-40';
+                      }
+                    } else {
+                      cls += 'bg-white/10 border border-white/20 hover:bg-white/20 cursor-pointer';
+                    }
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => handleOlympiadAnswer(puzzle, key, i)}
+                        disabled={done}
+                        className={cls}
+                      >
+                        {opt}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {done && (
+                  <div className="mt-3 p-2.5 bg-white/10 rounded-lg">
+                    <p className="text-xs">
+                      {wasCorrect ? '✅ Brilliant! ' : '❌ Not quite. '}
+                      {puzzle.explanation}
+                    </p>
+                    <p className="text-xs mt-1 text-white/60">
+                      +{wasCorrect ? '50' : '25'} XP earned
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
