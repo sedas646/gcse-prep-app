@@ -1,8 +1,36 @@
 import type { Subject } from '../types';
 
+const videoMap: Record<string, {videoId: string, channel: string}> = {
+  'maths-fdp': {videoId: 'ghGYSR0KrdA', channel: 'Cognito'},
+  'maths-indices-surds': {videoId: 'yGLFxMuFaJo', channel: 'Cognito'},
+  'maths-standard-form': {videoId: 'MBPr_GXCIEM', channel: 'Cognito'},
+  'maths-bounds': {videoId: 'bvCr7JE2u1U', channel: 'Cognito'},
+  'maths-expressions': {videoId: 'DKh16bBQxnw', channel: 'Cognito'},
+  'maths-linear': {videoId: 'RkYq3HfQiMk', channel: 'Cognito'},
+  'maths-quadratics': {videoId: 'TNoMmYFJmcE', channel: 'Cognito'},
+  'maths-simultaneous': {videoId: '1hJbzfClBUg', channel: 'Cognito'},
+  'maths-sequences': {videoId: 'oP2EEBgHFPM', channel: 'Cognito'},
+  'maths-functions': {videoId: 'uFX0AO0UXNE', channel: 'Cognito'},
+  'maths-ratio-prop': {videoId: '0YRc_JB6Wb0', channel: 'Cognito'},
+  'maths-direct-inverse': {videoId: 'v1FBScLxhGI', channel: 'Cognito'},
+  'maths-compound': {videoId: 'Cnr-gR0Idrg', channel: 'Cognito'},
+  'maths-angles': {videoId: 'NVg7MBSuSso', channel: 'Cognito'},
+  'maths-circles': {videoId: 'S0mIjILv5vo', channel: 'Cognito'},
+  'maths-transformations': {videoId: 'cMlMJGReDqs', channel: 'Cognito'},
+  'maths-vectors': {videoId: 'i2Y0BK8oJJE', channel: 'Cognito'},
+  'maths-trig': {videoId: 'PVmQueU3SVI', channel: 'Cognito'},
+  'maths-pythagoras': {videoId: 'aA8DFBQXFv0', channel: 'Cognito'},
+  'maths-averages': {videoId: 'l7gkNr1DHVU', channel: 'Cognito'},
+  'maths-histograms': {videoId: 'k6TQ2EcIhng', channel: 'Cognito'},
+  'maths-probability': {videoId: 'LVHRs2mRJv0', channel: 'Cognito'},
+  'maths-proof': {videoId: 'Eu3pkcI8tOI', channel: 'Cognito'},
+  'maths-calculus': {videoId: 'HH0iqMlGBVg', channel: 'Cognito'},
+  'maths-matrices': {videoId: 'rowWM-MijXU', channel: '3Blue1Brown'},
+};
+
 const t = (id: string, unitId: string, name: string, description: string, explanation: string, keyPoints: string[], flashcards: {id:string,front:string,back:string}[], questions: {id:string,topicId:string,question:string,options:string[],correctAnswer:number,explanation:string,difficulty:'foundation'|'intermediate'|'higher'|'further'}[]) => ({
   id, unitId, name, description, explanation, keyPoints, flashcards,
-  videos: [{ id: `${id}-v1`, title: `${name} - GCSE Maths`, videoId: 'dQw4w9WgXcQ', channel: 'Cognito' }],
+  videos: [{ id: `${id}-v1`, title: `${name} - GCSE Maths`, videoId: videoMap[id]?.videoId || 'dQw4w9WgXcQ', channel: videoMap[id]?.channel || 'Cognito' }],
   questions,
 });
 

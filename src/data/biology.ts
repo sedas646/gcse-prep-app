@@ -1,8 +1,30 @@
 import type { Subject } from '../types';
 
+const videoMap: Record<string, {videoId: string, channel: string}> = {
+  'bio-cell-structure': {videoId: 'URUJD5NEXC8', channel: 'FreeScienceLessons'},
+  'bio-cell-division': {videoId: 'f-ldPgEfAHI', channel: 'FreeScienceLessons'},
+  'bio-transport': {videoId: '8wOGBaIjmNE', channel: 'FreeScienceLessons'},
+  'bio-digestive': {videoId: 'bc4d-0FgFrs', channel: 'FreeScienceLessons'},
+  'bio-circulatory': {videoId: 'X9ZZ6tcxArI', channel: 'FreeScienceLessons'},
+  'bio-plant-organs': {videoId: 'rLbfWUKS2pY', channel: 'FreeScienceLessons'},
+  'bio-pathogens': {videoId: 'H2tp6IXtdN4', channel: 'FreeScienceLessons'},
+  'bio-immune': {videoId: 'oQ5VKo1BQEM', channel: 'FreeScienceLessons'},
+  'bio-drugs': {videoId: 'u1-6S8p1MpE', channel: 'FreeScienceLessons'},
+  'bio-photosynthesis': {videoId: 'LoGiStV4K0E', channel: 'FreeScienceLessons'},
+  'bio-respiration': {videoId: 'zYoHKthyGzs', channel: 'FreeScienceLessons'},
+  'bio-nervous': {videoId: 'FKonBCgTf1c', channel: 'FreeScienceLessons'},
+  'bio-hormones': {videoId: 'nYSBHECTiGg', channel: 'FreeScienceLessons'},
+  'bio-thermoregulation': {videoId: 'uf-jJfHFBQo', channel: 'FreeScienceLessons'},
+  'bio-dna': {videoId: '8kK2zwjRV0M', channel: 'FreeScienceLessons'},
+  'bio-evolution': {videoId: 'GcjgWov7mTM', channel: 'FreeScienceLessons'},
+  'bio-genetic-eng': {videoId: 'oYNKoRh2hHI', channel: 'FreeScienceLessons'},
+  'bio-ecosystems': {videoId: 'izRvPaAWgyw', channel: 'FreeScienceLessons'},
+  'bio-biodiversity': {videoId: 'GK_vRtHJZu4', channel: 'FreeScienceLessons'},
+};
+
 const t = (id: string, unitId: string, name: string, description: string, explanation: string, keyPoints: string[], flashcards: {id:string,front:string,back:string}[], questions: {id:string,topicId:string,question:string,options:string[],correctAnswer:number,explanation:string,difficulty:'foundation'|'intermediate'|'higher'|'further'}[]) => ({
   id, unitId, name, description, explanation, keyPoints, flashcards,
-  videos: [{ id: `${id}-v1`, title: `${name} - GCSE Biology`, videoId: 'placeholder', channel: 'FreeScienceLessons' }],
+  videos: [{ id: `${id}-v1`, title: `${name} - GCSE Biology`, videoId: videoMap[id]?.videoId || 'placeholder', channel: videoMap[id]?.channel || 'FreeScienceLessons' }],
   questions,
 });
 

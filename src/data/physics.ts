@@ -1,8 +1,31 @@
 import type { Subject } from '../types';
 
+const videoMap: Record<string, {videoId: string, channel: string}> = {
+  'phys-energy-stores': {videoId: 'Oo8JMHTBIFU', channel: 'FreeScienceLessons'},
+  'phys-energy-efficiency': {videoId: 'FcEVE3z-2Eg', channel: 'FreeScienceLessons'},
+  'phys-circuits': {videoId: 'HOFp8bHTB20', channel: 'FreeScienceLessons'},
+  'phys-mains': {videoId: 'Z2iVajLhj8Y', channel: 'FreeScienceLessons'},
+  'phys-power-energy': {videoId: 'N5Oo7Zif1Hg', channel: 'FreeScienceLessons'},
+  'phys-density': {videoId: 'HvSCJQjJHjA', channel: 'FreeScienceLessons'},
+  'phys-changes-state': {videoId: 'LHOJhJrpfL8', channel: 'FreeScienceLessons'},
+  'phys-gas-pressure': {videoId: 'T4D6a-niD3E', channel: 'FreeScienceLessons'},
+  'phys-atoms-radiation': {videoId: '6dUz4pfeI48', channel: 'FreeScienceLessons'},
+  'phys-half-life': {videoId: 'ekb_jD_E2F4', channel: 'FreeScienceLessons'},
+  'phys-forces-motion': {videoId: 'f1x9lgX8GaE', channel: 'FreeScienceLessons'},
+  'phys-newtons-laws': {videoId: 'iH-hCuS7VbA', channel: 'FreeScienceLessons'},
+  'phys-momentum': {videoId: 'ZM6nFn8OJWo', channel: 'FreeScienceLessons'},
+  'phys-wave-properties': {videoId: 'PeZOx1SQjNg', channel: 'FreeScienceLessons'},
+  'phys-em-spectrum': {videoId: 'JXCTUYlx-Ao', channel: 'FreeScienceLessons'},
+  'phys-light': {videoId: '1SI_s3MUtQ0', channel: 'FreeScienceLessons'},
+  'phys-magnets': {videoId: 'HJlkIiPCMys', channel: 'FreeScienceLessons'},
+  'phys-electromagnets': {videoId: 'qmVVj4rHa6k', channel: 'FreeScienceLessons'},
+  'phys-solar-system': {videoId: 'libKVRa01L8', channel: 'FreeScienceLessons'},
+  'phys-lifecycle-stars': {videoId: 'pm9s1H_ZQPM', channel: 'FreeScienceLessons'},
+};
+
 const t = (id: string, unitId: string, name: string, description: string, explanation: string, keyPoints: string[], flashcards: {id:string,front:string,back:string}[], questions: {id:string,topicId:string,question:string,options:string[],correctAnswer:number,explanation:string,difficulty:'foundation'|'intermediate'|'higher'|'further'}[]) => ({
   id, unitId, name, description, explanation, keyPoints, flashcards,
-  videos: [{ id: `${id}-v1`, title: `${name} - GCSE Physics`, videoId: 'dQw4w9WgXcQ', channel: 'Cognito' }],
+  videos: [{ id: `${id}-v1`, title: `${name} - GCSE Physics`, videoId: videoMap[id]?.videoId || 'dQw4w9WgXcQ', channel: videoMap[id]?.channel || 'Cognito' }],
   questions,
 });
 

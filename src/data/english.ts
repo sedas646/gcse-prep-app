@@ -1,8 +1,26 @@
 import type { Subject } from '../types';
 
+const videoMap: Record<string, {videoId: string, channel: string}> = {
+  'eng-lang1-reading': {videoId: 'KsB2FBm5tKg', channel: 'Mr Bruff'},
+  'eng-lang1-writing': {videoId: 'bQv55rgJepE', channel: 'Mr Bruff'},
+  'eng-lang2-reading': {videoId: 'fZxFbIVGx5o', channel: 'Mr Bruff'},
+  'eng-lang2-writing': {videoId: '14P8UQxT1xE', channel: 'Mr Bruff'},
+  'eng-macbeth-themes': {videoId: 'gVIXLLPe2QI', channel: 'Mr Bruff'},
+  'eng-macbeth-characters': {videoId: '3VlYJr7IRBU', channel: 'Mr Bruff'},
+  'eng-19c-context': {videoId: 'fA04qAHzGk0', channel: 'Mr Bruff'},
+  'eng-19c-analysis': {videoId: 'Xp1xeUk4E_I', channel: 'Mr Bruff'},
+  'eng-poetry-power': {videoId: 'Qvl9H0hCZqY', channel: 'Mr Bruff'},
+  'eng-poetry-comparison': {videoId: 'kqiL3_s2-Cs', channel: 'Mr Bruff'},
+  'eng-modern-themes': {videoId: '5FelaF-icJg', channel: 'Mr Bruff'},
+  'eng-writing-techniques': {videoId: 'rJBTr8hn8aw', channel: 'Mr Bruff'},
+  'eng-writing-accuracy': {videoId: 'bB7L3L7OubI', channel: 'Mr Bruff'},
+  'eng-reading-analysis': {videoId: 'X4JRvGe39VA', channel: 'Mr Bruff'},
+  'eng-reading-evaluation': {videoId: 'tU2OHYQX1fI', channel: 'Mr Bruff'},
+};
+
 const t = (id: string, unitId: string, name: string, description: string, explanation: string, keyPoints: string[], flashcards: {id:string,front:string,back:string}[], questions: {id:string,topicId:string,question:string,options:string[],correctAnswer:number,explanation:string,difficulty:'foundation'|'intermediate'|'higher'|'further'}[]) => ({
   id, unitId, name, description, explanation, keyPoints, flashcards,
-  videos: [{ id: `${id}-v1`, title: `${name} - GCSE English`, videoId: 'dQw4w9WgXcQ', channel: 'Mr Bruff' }],
+  videos: [{ id: `${id}-v1`, title: `${name} - GCSE English`, videoId: videoMap[id]?.videoId || 'dQw4w9WgXcQ', channel: videoMap[id]?.channel || 'Mr Bruff' }],
   questions,
 });
 

@@ -1,8 +1,33 @@
 import type { Subject } from '../types';
 
+const videoMap: Record<string, {videoId: string, channel: string}> = {
+  'chem-atoms': {videoId: 'Is3Cg3sP0ZE', channel: 'FreeScienceLessons'},
+  'chem-periodic-table': {videoId: 'OB0bCKOnLjc', channel: 'FreeScienceLessons'},
+  'chem-electron-config': {videoId: 'Bka5oaQ6hCY', channel: 'FreeScienceLessons'},
+  'chem-ionic': {videoId: 'ESah17lkFA0', channel: 'FreeScienceLessons'},
+  'chem-covalent': {videoId: 'oIIRJOLQnyk', channel: 'FreeScienceLessons'},
+  'chem-metallic': {videoId: 'bJQIHb0sAHY', channel: 'FreeScienceLessons'},
+  'chem-moles': {videoId: 'AsIJMnizCIE', channel: 'FreeScienceLessons'},
+  'chem-equations': {videoId: 'hQDpRJBBy_M', channel: 'FreeScienceLessons'},
+  'chem-reactivity': {videoId: 'FPnM4IfBRpw', channel: 'FreeScienceLessons'},
+  'chem-electrolysis': {videoId: 'AhFjmS7DWLA', channel: 'FreeScienceLessons'},
+  'chem-acids': {videoId: 'vt8fBdP5MQk', channel: 'FreeScienceLessons'},
+  'chem-exo-endo': {videoId: 'pN1JhFhFwiM', channel: 'FreeScienceLessons'},
+  'chem-bond-energy': {videoId: 'q_OQLD24N4U', channel: 'FreeScienceLessons'},
+  'chem-rate-factors': {videoId: 'mjXx7WVkpxg', channel: 'FreeScienceLessons'},
+  'chem-equilibrium': {videoId: 'TGrl6b3WdPo', channel: 'FreeScienceLessons'},
+  'chem-hydrocarbons': {videoId: 'F-j0yH0sCBk', channel: 'FreeScienceLessons'},
+  'chem-reactions-organic': {videoId: 'ILrTo4Gx7rk', channel: 'FreeScienceLessons'},
+  'chem-purity': {videoId: 'K9B5hSbcfDY', channel: 'FreeScienceLessons'},
+  'chem-tests': {videoId: 'TitrRpMUt0I', channel: 'FreeScienceLessons'},
+  'chem-atmosphere-comp': {videoId: 'PoHfXJrGZOo', channel: 'FreeScienceLessons'},
+  'chem-resources-use': {videoId: 'KkpJkkL_Ap0', channel: 'FreeScienceLessons'},
+  'chem-lca': {videoId: 'gFBLxBPFbWY', channel: 'FreeScienceLessons'},
+};
+
 const t = (id: string, unitId: string, name: string, description: string, explanation: string, keyPoints: string[], flashcards: {id:string,front:string,back:string}[], questions: {id:string,topicId:string,question:string,options:string[],correctAnswer:number,explanation:string,difficulty:'foundation'|'intermediate'|'higher'|'further'}[]) => ({
   id, unitId, name, description, explanation, keyPoints, flashcards,
-  videos: [{ id: `${id}-v1`, title: `${name} - GCSE Chemistry`, videoId: 'dQw4w9WgXcQ', channel: 'Cognito' }],
+  videos: [{ id: `${id}-v1`, title: `${name} - GCSE Chemistry`, videoId: videoMap[id]?.videoId || 'dQw4w9WgXcQ', channel: videoMap[id]?.channel || 'Cognito' }],
   questions,
 });
 
