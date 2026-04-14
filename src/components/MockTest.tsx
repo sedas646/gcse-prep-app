@@ -17,7 +17,52 @@ export default function MockTest() {
 
   if (!subject || !mockTest) return <div className="p-8 text-center text-slate-500">Mock test not found.</div>;
 
-  const [questions] = useState<Question[]>(mockTest.questions);
+  // Generate a fresh shuffled set of 30 questions each attempt
+  const [questions] = useState<Question[]>(() => {
+    // Gather all questions from the subject's topics
+    const subjectQuestions = subject.units.flatMap(u => u.topics.flatMap(t => t.questions));
+    // Combine with the dedicated mock test questions
+    const allPool = [...mockTest.questions];
+    const mockIds = new Set(allPool.map(q => q.id));
+    for (const q of subjectQuestions) {
+      if (!mockIds.has(q.id)) {
+        allPool.push(q);
+        mockIds.add(q.id);
+      }
+    }
+    // Shuffle using Fisher-Yates
+    const shuffled = [...allPool];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    // Pick 30 with balanced difficulty: 10 foundation, 10 intermediate, 7 higher, 3 further
+    const byDiff: Record<string, Question[]> = { foundation: [], intermediate: [], higher: [], further: [] };
+    for (const q of shuffled) {
+      if (byDiff[q.difficulty]) byDiff[q.difficulty].push(q);
+    }
+    const picked: Question[] = [
+      ...byDiff.foundation.slice(0, 10),
+      ...byDiff.intermediate.slice(0, 10),
+      ...byDiff.higher.slice(0, 7),
+      ...byDiff.further.slice(0, 3),
+    ];
+    // Fill remaining slots if any difficulty bucket was short
+    const pickedIds = new Set(picked.map(q => q.id));
+    for (const q of shuffled) {
+      if (picked.length >= 30) break;
+      if (!pickedIds.has(q.id)) {
+        picked.push(q);
+        pickedIds.add(q.id);
+      }
+    }
+    // Final shuffle so difficulties are mixed
+    for (let i = picked.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [picked[i], picked[j]] = [picked[j], picked[i]];
+    }
+    return picked.slice(0, 30);
+  });
   const [started, setStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
@@ -275,7 +320,13 @@ export default function MockTest() {
                 })}
             </div>
 
-            <div className="flex gap-3 justify-center">
+            <div className="flex gap-3 justify-center flex-wrap">
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700"
+              >
+                🔄 Retake Exam
+              </button>
               <button
                 onClick={() => navigate(`/subject/${subject.id}`)}
                 className="px-6 py-2.5 bg-slate-800 text-white rounded-lg font-medium hover:bg-slate-900"
