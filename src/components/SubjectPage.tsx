@@ -80,6 +80,37 @@ export default function SubjectPage() {
         )}
       </div>
 
+      {/* Summer Term Focus topics */}
+      {allTopics.some(t => t.summerTerm) && (
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4 mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xl">☀️</span>
+            <h3 className="font-semibold text-amber-800">Summer Term Focus</h3>
+            <span className="text-xs px-2 py-0.5 bg-amber-200 text-amber-800 rounded-full font-medium">Year 9</span>
+          </div>
+          <p className="text-xs text-amber-700 mb-3">Topics being taught this term — extra explanations, more practice questions, and renewing question sets.</p>
+          <div className="flex flex-wrap gap-2">
+            {allTopics.filter(t => t.summerTerm).map(topic => {
+              const prog = state.topicProgress[topic.id];
+              const m = prog?.masteryPercent || 0;
+              return (
+                <Link
+                  key={topic.id}
+                  to={`/subject/${subject.id}/topic/${topic.id}`}
+                  className="px-3 py-1.5 bg-white border border-amber-300 text-amber-800 rounded-full text-xs font-medium hover:bg-amber-100 transition-colors no-underline inline-flex items-center gap-1.5"
+                >
+                  <span>☀️</span>
+                  {topic.name}
+                  <span className="text-amber-500">·</span>
+                  <span className="text-amber-600">{m}%</span>
+                  <span>→</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Weak topics from diagnostic */}
       {diagnostic && diagnostic.weakTopics.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
@@ -177,8 +208,16 @@ export default function SubjectPage() {
                           {mastery > 0 ? `${mastery}%` : '—'}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-medium text-slate-700 group-hover:text-indigo-600 transition-colors">
+                          <h4 className="text-sm font-medium text-slate-700 group-hover:text-indigo-600 transition-colors flex items-center gap-1.5">
                             {topic.name}
+                            {topic.summerTerm && (
+                              <span
+                                title="Summer Term curriculum focus"
+                                className="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded-full font-semibold border border-amber-300"
+                              >
+                                ☀️ Summer
+                              </span>
+                            )}
                           </h4>
                           <p className="text-xs text-slate-400 truncate">{topic.description}</p>
                         </div>

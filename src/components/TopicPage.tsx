@@ -49,9 +49,19 @@ export default function TopicPage() {
       </div>
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-800">{topic.name}</h1>
+      <div className="flex items-start justify-between mb-6 gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h1 className="text-2xl font-bold text-slate-800">{topic.name}</h1>
+            {topic.summerTerm && (
+              <span
+                title="Year 9 Summer Term curriculum focus"
+                className="text-xs px-2 py-1 bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 rounded-full font-semibold border border-amber-300 inline-flex items-center gap-1"
+              >
+                <span>☀️</span> Summer Term Focus
+              </span>
+            )}
+          </div>
           <p className="text-sm text-slate-500 mt-1">{topic.description}</p>
         </div>
         <div className="text-right">

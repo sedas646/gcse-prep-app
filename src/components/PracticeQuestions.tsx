@@ -7,21 +7,70 @@ interface Props {
   questions: Question[];
   topicId: string;
   subjectColor: string;
+  /** Number of questions per practice set. If pool is smaller, all questions are used. Defaults to 10. */
+  setSize?: number;
 }
 
-export default function PracticeQuestions({ questions, topicId, subjectColor }: Props) {
+// Fisher-Yates shuffle (returns new array, doesn't mutate)
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Pick a balanced subset: shuffle then try to take a mix of difficulties
+function pickSet(pool: Question[], size: number): Question[] {
+  if (pool.length <= size) return shuffle(pool);
+
+  const byDifficulty: Record<string, Question[]> = {
+    foundation: shuffle(pool.filter(q => q.difficulty === 'foundation')),
+    intermediate: shuffle(pool.filter(q => q.difficulty === 'intermediate')),
+    higher: shuffle(pool.filter(q => q.difficulty === 'higher')),
+    further: shuffle(pool.filter(q => q.difficulty === 'further')),
+  };
+
+  // Aim for an even mix; fall back to whatever is available
+  const targets: Record<string, number> = {
+    foundation: Math.ceil(size * 0.3),
+    intermediate: Math.ceil(size * 0.3),
+    higher: Math.ceil(size * 0.3),
+    further: Math.ceil(size * 0.1),
+  };
+
+  const picked: Question[] = [];
+  for (const diff of ['foundation', 'intermediate', 'higher', 'further']) {
+    const take = byDifficulty[diff].splice(0, targets[diff]);
+    picked.push(...take);
+  }
+
+  // Top up with leftovers if we're short
+  const leftover = shuffle(pool.filter(q => !picked.includes(q)));
+  while (picked.length < size && leftover.length) picked.push(leftover.shift()!);
+
+  return shuffle(picked).slice(0, size);
+}
+
+export default function PracticeQuestions({ questions, topicId, subjectColor, setSize = 10 }: Props) {
   const { dispatch } = useApp();
+  const poolSize = questions.length;
+  const renewable = poolSize > setSize;
+
+  const [activeSet, setActiveSet] = useState<Question[]>(() => pickSet(questions, setSize));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [results, setResults] = useState<Record<number, boolean>>({});
   const [completed, setCompleted] = useState(false);
+  const [setsCompleted, setSetsCompleted] = useState(0);
 
-  if (questions.length === 0) {
+  if (poolSize === 0) {
     return <div className="text-center text-slate-400 py-12">No practice questions available yet.</div>;
   }
 
-  const question = questions[currentIndex];
+  const question = activeSet[currentIndex];
   const totalCorrect = Object.values(results).filter(Boolean).length;
 
   const handleAnswer = (answerIndex: number) => {
@@ -44,7 +93,7 @@ export default function PracticeQuestions({ questions, topicId, subjectColor }: 
   };
 
   const handleNext = () => {
-    if (currentIndex < questions.length - 1) {
+    if (currentIndex < activeSet.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setSelectedAnswer(null);
       setShowExplanation(false);
@@ -54,28 +103,33 @@ export default function PracticeQuestions({ questions, topicId, subjectColor }: 
     }
   };
 
-  const handleRestart = () => {
+  const startNewSet = () => {
+    setActiveSet(pickSet(questions, setSize));
     setCurrentIndex(0);
     setSelectedAnswer(null);
     setShowExplanation(false);
     setResults({});
     setCompleted(false);
+    setSetsCompleted(prev => prev + 1);
   };
 
   if (completed) {
-    const percent = Math.round((totalCorrect / questions.length) * 100);
+    const percent = Math.round((totalCorrect / activeSet.length) * 100);
     return (
       <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
         <div className="text-5xl mb-4">{percent >= 90 ? '🌟' : percent >= 70 ? '👏' : percent >= 50 ? '👍' : '💪'}</div>
-        <h3 className="text-2xl font-bold text-slate-800 mb-2">Practice Complete!</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-2">Practice Set Complete!</h3>
         <p className="text-4xl font-bold mb-2" style={{ color: percent >= 70 ? '#22c55e' : '#ef4444' }}>
           {percent}%
         </p>
-        <p className="text-slate-500 mb-1">{totalCorrect} out of {questions.length} correct</p>
-        <p className="text-sm text-emerald-600 mb-6">+{XP_REWARDS.PRACTICE_COMPLETE} XP earned</p>
+        <p className="text-slate-500 mb-1">{totalCorrect} out of {activeSet.length} correct</p>
+        <p className="text-sm text-emerald-600 mb-2">+{XP_REWARDS.PRACTICE_COMPLETE} XP earned</p>
+        {setsCompleted > 0 && (
+          <p className="text-xs text-slate-400 mb-4">Sets completed this session: {setsCompleted + 1}</p>
+        )}
 
         <div className="flex flex-wrap gap-2 justify-center mb-6">
-          {questions.map((_, i) => (
+          {activeSet.map((_, i) => (
             <div
               key={i}
               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
@@ -87,12 +141,24 @@ export default function PracticeQuestions({ questions, topicId, subjectColor }: 
           ))}
         </div>
 
-        <button
-          onClick={handleRestart}
-          className="px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700"
-        >
-          Try Again
-        </button>
+        {renewable ? (
+          <div className="space-y-2">
+            <button
+              onClick={startNewSet}
+              className="px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700"
+            >
+              🎲 New Practice Set ({setSize} fresh questions)
+            </button>
+            <p className="text-xs text-slate-400">{poolSize} questions available — randomly drawn each round</p>
+          </div>
+        ) : (
+          <button
+            onClick={startNewSet}
+            className="px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700"
+          >
+            Try Again
+          </button>
+        )}
       </div>
     );
   }
@@ -109,7 +175,8 @@ export default function PracticeQuestions({ questions, topicId, subjectColor }: 
       {/* Progress */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-slate-500">
-          Question {currentIndex + 1} of {questions.length}
+          Question {currentIndex + 1} of {activeSet.length}
+          {renewable && <span className="ml-2 text-xs text-indigo-500">(set {setsCompleted + 1} • {poolSize} in pool)</span>}
         </p>
         <span className={`text-xs px-2 py-1 rounded-full ${difficultyColors[question.difficulty]}`}>
           {question.difficulty}
@@ -120,7 +187,7 @@ export default function PracticeQuestions({ questions, topicId, subjectColor }: 
         <div
           className="h-1.5 rounded-full transition-all"
           style={{
-            width: `${((currentIndex + (showExplanation ? 1 : 0)) / questions.length) * 100}%`,
+            width: `${((currentIndex + (showExplanation ? 1 : 0)) / activeSet.length) * 100}%`,
             backgroundColor: subjectColor,
           }}
         />
@@ -185,7 +252,7 @@ export default function PracticeQuestions({ questions, topicId, subjectColor }: 
             onClick={handleNext}
             className="mt-4 w-full py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700"
           >
-            {currentIndex === questions.length - 1 ? 'See Results' : 'Next Question →'}
+            {currentIndex === activeSet.length - 1 ? 'See Results' : 'Next Question →'}
           </button>
         )}
       </div>

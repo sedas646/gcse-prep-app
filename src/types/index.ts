@@ -31,6 +31,7 @@ export interface Topic {
   flashcards: Flashcard[];
   videos: YouTubeVideo[];
   questions: Question[];
+  summerTerm?: boolean;
 }
 
 export interface Unit {
