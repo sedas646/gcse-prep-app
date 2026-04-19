@@ -1,26 +1,8 @@
 import type { Subject } from '../types';
 
-const videoMap: Record<string, {videoId: string, channel: string}> = {
-  'hist-medieval-medicine': {videoId: 'IyVNQz6UYYo', channel: 'History With Mr Green'},
-  'hist-renaissance-medicine': {videoId: 'byDNz4GQq6Q', channel: 'History With Mr Green'},
-  'hist-industrial-medicine': {videoId: 'pj7RVqIulMk', channel: 'History With Mr Green'},
-  'hist-modern-medicine': {videoId: 'SpJHhZ1m4ZY', channel: 'History With Mr Green'},
-  'hist-elizabeth-court': {videoId: 'FnSHtnFayeI', channel: 'History With Mr Green'},
-  'hist-elizabeth-religion': {videoId: 'FxHp3-F8xkU', channel: 'History With Mr Green'},
-  'hist-elizabeth-society': {videoId: 'MoQsEJPIseE', channel: 'History With Mr Green'},
-  'hist-elizabeth-threats': {videoId: 'Zy6r0hW8MIQ', channel: 'History With Mr Green'},
-  'hist-coldwar-origins': {videoId: 'wVqziNV7dGY', channel: 'History With Mr Green'},
-  'hist-coldwar-crises': {videoId: 'nTnAET9hEMo', channel: 'History With Mr Green'},
-  'hist-coldwar-end': {videoId: 'w6YzpsGCkJo', channel: 'History With Mr Green'},
-  'hist-weimar-republic': {videoId: 'Vw_RFsCcRac', channel: 'History With Mr Green'},
-  'hist-nazi-rise': {videoId: 'ATlila3e9dM', channel: 'History With Mr Green'},
-  'hist-nazi-control': {videoId: 'CntnVZqeCog', channel: 'History With Mr Green'},
-  'hist-nazi-life': {videoId: 'CYvFxs34uls', channel: 'History With Mr Green'},
-};
-
 const t = (id: string, unitId: string, name: string, description: string, explanation: string, keyPoints: string[], flashcards: {id:string,front:string,back:string}[], questions: {id:string,topicId:string,question:string,options:string[],correctAnswer:number,explanation:string,difficulty:'foundation'|'intermediate'|'higher'|'further'}[]) => ({
   id, unitId, name, description, explanation, keyPoints, flashcards,
-  videos: [{ id: `${id}-v1`, title: `${name} - GCSE History`, videoId: videoMap[id]?.videoId || 'dQw4w9WgXcQ', channel: videoMap[id]?.channel || 'History With Mr Green' }],
+  videos: [],
   questions,
 });
 
